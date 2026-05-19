@@ -1,24 +1,28 @@
-name: My First CI Pipeline
+name: DevSecOps SAST Pipeline
 
-# Երբ է աշխատելու այս pipeline-ը. երբ main ճյուղին կոդ push անենք
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
-    # Որտեղ է աշխատելու. GitHub-ը մեզ տալիս է անվճար Ubuntu սերվեր
+  security-scan:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Քաշում ենք մեր կոդը այս սերվերի մեջ
+    # 1. Քաշում ենք կոդը
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 2. Կատարում ենք առաջին պարզ հրամանը
-    - name: Hello World Step
-      run: echo "Hello, DevSecOps World! Մեր առաջին pipeline-ը աշխատեց։"
+    # 2. Տեղադրում ենք Python սերվերի վրա
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-    # 3. Ստուգում ենք, թե ինչ ՕՀ է աշխատում GitHub-ի սերվերում
-    - name: Check Server OS
-      run: uname -a
+    # 3. Տեղադրում ենք Bandit սկաները
+    - name: Install Security Tools
+      run: pip install bandit
+
+    # 4. Աշխատացնում ենք սկաները մեր ամբողջ կոդի վրա
+    - name: Run Bandit SAST Scan
+      run: bandit -r .
