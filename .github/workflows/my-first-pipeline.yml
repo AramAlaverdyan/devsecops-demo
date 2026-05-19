@@ -1,0 +1,24 @@
+name: My First CI Pipeline
+
+# Երբ է աշխատելու այս pipeline-ը. երբ main ճյուղին կոդ push անենք
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    # Որտեղ է աշխատելու. GitHub-ը մեզ տալիս է անվճար Ubuntu սերվեր
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Քաշում ենք մեր կոդը այս սերվերի մեջ
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Կատարում ենք առաջին պարզ հրամանը
+    - name: Hello World Step
+      run: echo "Hello, DevSecOps World! Մեր առաջին pipeline-ը աշխատեց։"
+
+    # 3. Ստուգում ենք, թե ինչ ՕՀ է աշխատում GitHub-ի սերվերում
+    - name: Check Server OS
+      run: uname -a
