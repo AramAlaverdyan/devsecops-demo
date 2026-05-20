@@ -26,4 +26,4 @@ jobs:
 
     # ՆՈՐ ՔԱՅԼ. Ստուգում ենք requirements.txt-ի library-ները
     - name: Run pip-audit SCA Scan
-      run: pip-audit -r requirements.txt
+      run: python -m pip-audit -r requirements.txt
