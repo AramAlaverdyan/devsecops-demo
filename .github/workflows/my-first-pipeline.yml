@@ -23,3 +23,7 @@ jobs:
     # Ավելացրինք -ll դրոշակը
     - name: Run Bandit SAST Scan
       run: bandit -r . -ll
+
+    # ՆՈՐ ՔԱՅԼ. Ստուգում ենք requirements.txt-ի library-ները
+    - name: Run pip-audit SCA Scan
+      run: pip-audit -r requirements.txt
