@@ -1,4 +1,4 @@
-name: DevSecOps SAST Pipeline
+name: DevSecOps Ultimate Pipeline
 
 on:
   push:
@@ -11,25 +11,25 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # ԿԱՐԵՎՈՐ Է. Սա հրահանգում է քաշել ամբողջ Git պատմությունը, որ Gitleaks-ը կարողանա հին commit-ներն էլ ստուգել
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        fetch-depth: 0 # ԿԱՐԵՎՈՐ Է. Սա հրահանգում է քաշել ամբողջ Git պատմությունը, որ Gitleaks-ը կարողանա հին commit-ներն էլ ստուգել
-
-    - name: Set uo Python
-      uses: action/checkout@v5
-      with:
         python-version: '3.10'
 
     - name: Install Security Tools
+      run: pip install bandit pip-audit
+
+    - name: Run Bandit SAST Scan
       run: bandit -r . -ll
 
     - name: Run pip-audit SCA Scan
       run: pip-audit -r requirements.txt
 
-    # Nor qajl gaxtniqi vors Gitleaksov
+    # ՆՈՐ ՔԱՅԼ. Գաղտնիքների որս Gitleaks-ով
     - name: Run Gitleaks Secrets Scan
       uses: gitleaks/gitleaks-action@v2
-      enc:
+      env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Սա ավտոմատ տրվում է GitHub-ի կողմից
