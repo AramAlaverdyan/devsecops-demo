@@ -9,4 +9,4 @@ def home():
 
 if __name__ == '__main__':
     # ԿԱՐԵՎՈՐ Է. Docker-ի ներսում պետք է լսել 0.0.0.0 պորտը, որ դրսից հասանելի լինի
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000) # nosec
