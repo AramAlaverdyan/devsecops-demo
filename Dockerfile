@@ -1,11 +1,14 @@
 FROM python:3.10-alpine
 
-# ԱՎԵԼԱՑՆՈՒՄ ԵՆՔ ԱՅՍ ՏՈՂԸ. Սա հենց build-ի պահին կներբեռնի 2026-ի բոլոր թարմ security patch-երը
 RUN apk update && apk upgrade --no-cache
 
 WORKDIR /app
 
 COPY requirements.txt .
+
+# ԱՎԵԼԱՑՆՈՒՄ ԵՆՔ ԱՅՍ ՏՈՂԸ. Թարմացնում ենք Python-ի հիմնական համակարգային գործիքները
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
 COPY app.py .
 COPY config.py .
 
