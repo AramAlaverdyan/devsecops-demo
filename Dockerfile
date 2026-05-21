@@ -1,5 +1,7 @@
-# Անցնում ենք գերանվտանգ Alpine Linux-ին
 FROM python:3.10-alpine
+
+# ԱՎԵԼԱՑՆՈՒՄ ԵՆՔ ԱՅՍ ՏՈՂԸ. Սա հենց build-ի պահին կներբեռնի 2026-ի բոլոր թարմ security patch-երը
+RUN apk update && apk upgrade --no-cache
 
 WORKDIR /app
 
