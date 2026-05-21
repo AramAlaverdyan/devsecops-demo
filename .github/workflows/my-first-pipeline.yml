@@ -12,7 +12,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # ԿԱՐԵՎՈՐ Է. Սա հրահանգում է քաշել ամբողջ Git պատմությունը, որ Gitleaks-ը կարողանա հին commit-ներն էլ ստուգել
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -28,8 +28,20 @@ jobs:
     - name: Run pip-audit SCA Scan
       run: pip-audit -r requirements.txt
 
-    # ՆՈՐ ՔԱՅԼ. Գաղտնիքների որս Gitleaks-ով
     - name: Run Gitleaks Secrets Scan
       uses: gitleaks/gitleaks-action@v2
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Սա ավտոմատ տրվում է GitHub-ի կողմից
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # ՆՈՐ ՔԱՅԼ. Կառուցում ենք Docker Image-ը
+    - name: Build Docker Image
+      run: docker build -t my-secure-app:latest .
+
+    # ՆՈՐ ՔԱՅԼ. Սկանավորում ենք Docker Image-ը Trivy-ով
+    - name: Run Trivy Vulnerability Scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'my-secure-app:latest'
+        format: 'table'
+        exit-code: '1' # Եթե վտանգ գտնի, կոտրի pipeline-ը
+        severity: 'CRITICAL,HIGH' # Մեզ հետաքրքիր են միայն լուրջ վտանգները
