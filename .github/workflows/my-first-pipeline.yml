@@ -33,15 +33,25 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # ՆՈՐ ՔԱՅԼ. Կառուցում ենք Docker Image-ը
     - name: Build Docker Image
       run: docker build -t my-secure-app:latest .
 
-    # ՆՈՐ ՔԱՅԼ. Սկանավորում ենք Docker Image-ը Trivy-ով
     - name: Run Trivy Vulnerability Scanner
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: 'my-secure-app:latest'
         format: 'table'
-        exit-code: '1' # Եթե վտանգ գտնի, կոտրի pipeline-ը
-        severity: 'CRITICAL,HIGH' # Մեզ հետաքրքիր են միայն լուրջ վտանգները
+        exit-code: '1'
+        severity: 'CRITICAL,HIGH'
+
+    # ՆՈՐ ՔԱՅԼ 1. Միացնում ենք մեր վեբ-սերվերը ֆոնային ռեժիմով
+    - name: Start Web Application
+      run: |
+        docker run -d -p 5000:5000 --name web-app my-secure-app:latest
+        sleep 5
+        curl -I http://localhost:5000
+
+    # ՆՈՐ ՔԱՅԼ 2. DAST գրոհ Nikto ռոբոտ-հակերով
+    - name: Run Nikto DAST Web Scan
+      run: |
+        docker run --rm --network="host" sullo/nikto -h http://localhost:5000

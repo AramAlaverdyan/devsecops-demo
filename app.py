@@ -1,12 +1,12 @@
+from flask import Flask
 import os
-import subprocess
 
-# 1-ԻՆ ՈՒՂՂՈՒՄ. Գաղտնի կոդը կարդում ենք Environment-ից (ոչ թե hardcode ենք անում)
-AWS_SECRET_KEY = os.environ.get("AWS_Secret_KEY")
+app = Flask(__name__)
 
-def execute_user_command(user_input):
-	## 2-ՐԴ ՈՒՂՂՈՒՄ. os.system-ի փոխարեն օգտագործում ենք անվտանգ subprocess.run
-	# Սա թույլ չի տա Command Injection անել
-	subprocess.run(["bin/echo", user_input])
+@app.route('/')
+def home():
+    return "<h1>Welcome to Secure Web App! DevSecOps 2026.</h1>"
 
-print("App is runnig safely and successfully!")
+if __name__ == '__main__':
+    # ԿԱՐԵՎՈՐ Է. Docker-ի ներսում պետք է լսել 0.0.0.0 պորտը, որ դրսից հասանելի լինի
+    app.run(host='0.0.0.0', port=5000)
