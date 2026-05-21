@@ -54,4 +54,4 @@ jobs:
     # ՆՈՐ ՔԱՅԼ 2. DAST գրոհ Nikto ռոբոտ-հակերով
     - name: Run Nikto DAST Web Scan
       run: |
-        docker run --rm --network="host" sullo/nikto -h http://localhost:5000
+        docker run --rm --network="host" instrumentisto/nikto -h http://localhost:5000
